@@ -1,9 +1,12 @@
-
-import { envConfig } from "./config/config";
 import app from "./src/app"
+import {config} from 'dotenv'
+config()
+
+//importing connection.ts
+import './src/database/connection'
 
 function startServer(){
-    const port = envConfig.portNumber;
+    const port = process.env.PORT;
 
     app.listen(port,()=>{
         console.log(`Server started at port ${port}`);
