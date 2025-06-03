@@ -21,7 +21,7 @@ sequelize.authenticate()
 
 //migration code
 
-sequelize.sync({force:true}).then(()=>{
+sequelize.sync({alter:true}).then(()=>{
     console.log("Successfully Migrated to Database");
 }).catch((error)=>{
     console.log(error);

@@ -20,7 +20,8 @@ class User extends Model {
     declare id : string
 
   @Column({
-    type : DataType.STRING
+    type : DataType.STRING,
+    unique : true
   })
   declare username : string
 
@@ -30,7 +31,8 @@ class User extends Model {
   declare password : string
 
     @Column({
-    type : DataType.STRING
+    type : DataType.STRING,
+    unique : true
   })
   declare email : string
 
