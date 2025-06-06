@@ -32,6 +32,46 @@ class AuthController {
             })
         }
     }
-}
+
+    static async loginUser(req: Request, res: Response){
+
+        const {username, password} = req.body;
+
+        if(!username || !password){
+            res.status(400).json({
+                message : "Please enter username and password"
+            })
+            return;
+        }
+           const data = await User.findAll({
+                where : {
+                    username : username
+                }
+            })
+
+            //check if the username exits
+            if(data.length == 0){
+                res.status(404).json({
+                    message : "Not Registered!"
+                })
+            }else{
+                //check if the password verify by comparing hash
+
+                const isPasswordMatch = bcrypt.compareSync(password, data[0].password);
+
+                if(isPasswordMatch){
+                    //login success --> will get a token
+                }else{
+                    res.status(403).json({
+                        message : "Invalid Email or Password!"
+                    })
+                }
+
+            }
+
+        }
+
+    }
+
 
 export default AuthController
