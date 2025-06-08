@@ -1,7 +1,8 @@
 
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import User from '../../../database/models/user.model';
+import User from '../../../database/models/user.model'
+import jwt from 'jsonwebtoken'
 
 class AuthController {
     static async registerUser(req: Request, res: Response) {
@@ -61,6 +62,15 @@ class AuthController {
 
                 if(isPasswordMatch){
                     //login success --> will get a token
+                    const token = jwt.sign({
+                        id : data[0].id
+                    },'thisissecret',{
+                         expiresIn : '90d'
+                    })
+                    res.json({
+                        token : token
+                    })
+
                 }else{
                     res.status(403).json({
                         message : "Invalid Email or Password!"
