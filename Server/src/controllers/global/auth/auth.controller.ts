@@ -64,8 +64,8 @@ class AuthController {
                     //login success --> will get a token
                     const token = jwt.sign({
                         id : data[0].id
-                    },'thisissecret',{
-                         expiresIn : '90d'
+                    },'thisIsSecret',{
+                         expiresIn : '30d'
                     })
                     res.json({
                         token : token
