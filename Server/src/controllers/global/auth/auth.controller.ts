@@ -67,8 +67,9 @@ class AuthController {
                     },'thisIsSecret',{
                          expiresIn : '30d'
                     })
-                    res.json({
-                        token : token
+                    res.status(201).json({
+                        token : token,
+                        message : "Login Success!"
                     })
 
                 }else{
