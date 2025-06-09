@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json())
 
 //importing routes
-import authRoute from '../routes/global/auth.route'
+import authRoute from './routes/global/auth.route'
 app.use("/api",authRoute);
 
 export default app
