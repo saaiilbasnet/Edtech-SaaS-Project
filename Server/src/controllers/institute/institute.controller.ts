@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInstituteNumber";
+import { IExtendedRequest } from "../../middlewares/type";
 
 class InstituteController{
-    static async createInstitute(req : Request, res: Response){
+    static async createInstitute(req : IExtendedRequest, res: Response, next: NextFunction){
 
         const {instituteName, instituteEmail, institutePhoneNumber, instituteAddress} = req.body;
 
@@ -34,18 +35,19 @@ class InstituteController{
                 replacements : [instituteName, instituteEmail, institutePhoneNumber, instituteAddress, institutePanNo, instituteVatNo]
             })
 
-            await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
-            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
-            teacherName VARCHAR(255) NOT NULL, 
-            teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
-            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
-            )`)
+            // await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
+            // id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+            // teacherName VARCHAR(255) NOT NULL, 
+            // teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
+            // teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
+            // )`)
 
             res.status(201).json({
                 message : "Institute created!"
             })
-
+        next()     
     }
+   
 }
 
 export default InstituteController

@@ -36,9 +36,9 @@ class AuthController {
 
     static async loginUser(req: Request, res: Response){
 
-        const {username, password} = req.body;
+        const {email, password} = req.body;
 
-        if(!username || !password){
+        if(!email || !password){
             res.status(400).json({
                 message : "Please enter username and password"
             })
@@ -46,7 +46,7 @@ class AuthController {
         }
            const data = await User.findAll({
                 where : {
-                    username : username
+                    email : email
                 }
             })
 
