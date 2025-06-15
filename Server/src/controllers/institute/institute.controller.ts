@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInstituteNumber";
 import { IExtendedRequest } from "../../middlewares/type";
+import User from "../../database/models/user.model";
 
 class InstituteController{
     static async createInstitute(req : IExtendedRequest, res: Response, next: NextFunction){
@@ -35,19 +36,77 @@ class InstituteController{
                 replacements : [instituteName, instituteEmail, institutePhoneNumber, instituteAddress, institutePanNo, instituteVatNo]
             })
 
-            // await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
-            // id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
-            // teacherName VARCHAR(255) NOT NULL, 
-            // teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
-            // teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
-            // )`)
+            //tracking user history
 
-            res.status(201).json({
-                message : "Institute created!"
+            await sequelize.query(`CREATE TABLE IF NOT EXISTS user_institution(
+                id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                userId VARCHAR(255) REFERENCES users(id),
+                instituteNumber INT UNIQUE
+                )`)
+
+                if(req.user){
+                    // console.log("Triggered"); 
+                    await sequelize.query(`INSERT INTO user_institution(userId, instituteNumber) VALUES(?,?)`,{
+                        replacements : [req.user.id, instituteNumber]
+                    })
+                }
+
+            //updating the database
+
+            await User.update({
+                currentInstituteNumber : instituteNumber,
+                role : 'institute'
+            },{
+                where : {
+                    id : req.user?.id
+                }
             })
+
+            req.instituteNumber = instituteNumber
         next()     
     }
-   
+
+static async createTeacherTable(req: IExtendedRequest, res: Response, next : NextFunction){
+
+    const instituteNumber = req.instituteNumber
+
+     await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+            teacherName VARCHAR(255) NOT NULL, 
+            teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
+            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
+            )`)
+            next()
+
+}
+
+static async createStudentTable(req: IExtendedRequest, res: Response, next: NextFunction){
+
+    const instituteNumber = req.instituteNumber
+     await sequelize.query(`CREATE TABLE IF NOT EXISTS student_${instituteNumber}(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+        studentName VARCHAR(255) NOT NULL, 
+        studentPhoneNo VARCHAR(255) NOT NULL UNIQUE
+        )`)
+    next()
+
+}
+
+static async createCourseTable(req: IExtendedRequest, res : Response)
+{
+
+    const instituteNumber = req.instituteNumber
+    await sequelize.query(`CREATE TABLE IF NOT EXISTS course_${instituteNumber}(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        courseName VARCHAR(255) NOT NULL UNIQUE,
+        coursePrice VARCHAR(255) NOT NULL
+        )`)
+
+        res.status(201).json({
+            message : "Institute Created!",
+            instituteNumber : instituteNumber
+        })
+}   
 }
 
 export default InstituteController
