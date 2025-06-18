@@ -36,7 +36,9 @@ import { IExtendedRequest } from "./type";
             }
             else{
                 console.log(result);
-                const userData = await User.findByPk(result.id)
+                const userData = await User.findByPk(result.id,{
+                    attributes : ['id','currentInstituteNumber']
+                })
 
                 if(!userData){
                     res.status(403).json({

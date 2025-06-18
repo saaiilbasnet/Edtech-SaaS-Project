@@ -74,7 +74,11 @@ static async createTeacherTable(req: IExtendedRequest, res: Response, next : Nex
             id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
             teacherName VARCHAR(255) NOT NULL, 
             teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
-            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
+            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE,
+            teacherExperties VArCHAR(255) NOT NULL,
+            joinedDate DATE NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+             updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )`)
             next()
 
@@ -86,7 +90,12 @@ static async createStudentTable(req: IExtendedRequest, res: Response, next: Next
      await sequelize.query(`CREATE TABLE IF NOT EXISTS student_${instituteNumber}(
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
         studentName VARCHAR(255) NOT NULL, 
-        studentPhoneNo VARCHAR(255) NOT NULL UNIQUE
+        studentPhoneNo VARCHAR(255) NOT NULL UNIQUE,
+        studentAddress TEXT NOT NULL,
+        enrolledDate DATE NOT NULL,
+        studentImage VARCHAR(255),
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`)
     next()
 
@@ -99,7 +108,13 @@ static async createCourseTable(req: IExtendedRequest, res : Response)
     await sequelize.query(`CREATE TABLE IF NOT EXISTS course_${instituteNumber}(
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         courseName VARCHAR(255) NOT NULL UNIQUE,
-        coursePrice VARCHAR(255) NOT NULL
+        coursePrice VARCHAR(255) NOT NULL,
+        courseDuration VARCHAR(100) NOT NULL,
+        courseLevel ENUM('beginner','intermediate','advance') NOT NULL,
+        courseThumbnail VARCHAR(255) NOT NULL,
+        courseDescription TEXT NOT NULL,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`)
 
         res.status(201).json({
