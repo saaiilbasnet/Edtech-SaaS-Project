@@ -6,7 +6,7 @@ export interface IExtendedRequest extends Request{
             email : string,
             role : string,
             username : string | null,
-            currentInstituteNumber : number
+            currentInstituteNumber : number | string
         },
         instituteNumber ?: number | string
     }
