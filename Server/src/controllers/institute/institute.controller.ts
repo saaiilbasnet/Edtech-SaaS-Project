@@ -3,6 +3,7 @@ import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInstituteNumber";
 import { IExtendedRequest } from "../../middlewares/type";
 import User from "../../database/models/user.model";
+import categories from "../../seed";
 
 class InstituteController{
     static async createInstitute(req : IExtendedRequest, res: Response, next: NextFunction){
@@ -121,7 +122,30 @@ static async createCourseTable(req: IExtendedRequest, res : Response)
             message : "Institute Created!",
             instituteNumber : instituteNumber
         })
-}   
+}
+
+static async createCategory(req: IExtendedRequest, res:Response, next: NextFunction){
+
+    const instituteNumber = req.instituteNumber
+    
+    sequelize.query(`CREATE TABLE category_${instituteNumber}(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        categoryName VARCHAR(255) NOT NULL,
+        categoryDescription TEXT,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`)
+
+    categories.forEach(async (category)=>{
+        await sequelize.query(`INSERT INTO category_${instituteNumber}(
+            categoryName, categoryDescription
+            ) VALUES (?,?)`,{
+                replacements : [category.categoryName, category.categoryDescription]
+            })
+    })
+    next()
+}
+
 }
 
 export default InstituteController

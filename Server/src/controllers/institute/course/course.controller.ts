@@ -14,11 +14,11 @@ const createCourse = async (req: IExtendedRequest, res: Response)=>{
     }
 
     const instituteNumber = req.user?.currentInstituteNumber
-    const courseThumbnail = null
+    const courseThumbnail = req.body ? req.file?.path : null;
     const returnedData = await sequelize.query(`INSERT INTO course_${instituteNumber}(
-        coursePrice,courseName,courseDescription,courseDuration,courseLevel
-        )`,{
-            replacements : [coursePrice, courseName, courseDescription, courseDuration, courseLevel]
+        coursePrice,courseName,courseDescription,courseDuration,courseLevel,courseThumbnail
+        ) VALUES(?,?,?,?,?,?)`,{
+            replacements : [coursePrice, courseName, courseDescription, courseDuration, courseLevel, courseThumbnail]
         })
 
         console.log(returnedData);
