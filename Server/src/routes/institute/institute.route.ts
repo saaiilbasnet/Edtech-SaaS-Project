@@ -5,6 +5,6 @@ import isLoggedIn from '../../middlewares/middleware';
 import asyncErrorHandler from '../../services/asyncErrorHandler';
 const router = express.Router()
 
-router.route("/").post(isLoggedIn,InstituteController.createInstitute,InstituteController.createTeacherTable, InstituteController.createStudentTable, asyncErrorHandler(InstituteController.createCourseTable));
+router.route("/").post(isLoggedIn,InstituteController.createInstitute,InstituteController.createTeacherTable, InstituteController.createStudentTable, InstituteController.createCategory, asyncErrorHandler(InstituteController.createCourseTable));
 
 export default router
