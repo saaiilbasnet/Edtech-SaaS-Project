@@ -79,7 +79,8 @@ static async createTeacherTable(req: IExtendedRequest, res: Response, next : Nex
             teacherExperties VArCHAR(255) NOT NULL,
             joinedDate DATE NOT NULL,
             teacherPhoto VARCHAR(255),
-            teacherPAssword NOT NULL VARCHAR(255),
+            teacherPassword VARCHAR(255),
+            salary VARCHAR(255),
                courseId VARCHAR(100) REFERENCES course_${instituteNumber}(id),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
              updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -3,13 +3,14 @@ import { IExtendedRequest } from "../../../middlewares/type";
 import generateRandomPassword from "../../../services/generateRandomPassword";
 import sequelize from "../../../database/connection";
 import { QueryTypes } from "sequelize";
+import sendMail from "../../../services/sendMail";
 
 const createTeacher = async (req: IExtendedRequest, res: Response)=>{
     const instituteNumber = req.user?.currentInstituteNumber
-    const {teacherName, teacherEmail, teacherPhoneNumber, teacherExpertise, teacherSalary, teacherJoinedDate, courseId} =req.body;
+    const {teacherName, teacherEmail, teacherPhoneNumber, teacherExperties, teacherSalary, teacherJoinedDate, courseId} =req.body;
     const teacherPhoto = req.file?req.file.path : "https://images.app.goo.gl/fupd5frM7yaRhu1v5"
 
-    if(!teacherName || !teacherEmail || !teacherPhoneNumber || !teacherExpertise || !teacherSalary || !teacherJoinedDate){
+    if(!teacherName || !teacherEmail || !teacherPhoneNumber || !teacherExperties || !teacherSalary || !teacherJoinedDate){
         return res.status(400).json({
             message : "Enter all details!"
         })
@@ -18,10 +19,10 @@ const createTeacher = async (req: IExtendedRequest, res: Response)=>{
     const data = generateRandomPassword(teacherName);
 
     const insertedData = await sequelize.query(`INSERT INTO teacher_${instituteNumber}(
-        teacherName, teacherEmail, teacherPhoneNumber, teacherExpertise, joinedDate, salary, teacherPhoto, teacherPassword
+        teacherName, teacherEmail, teacherPhoneNumber, teacherExperties, joinedDate, salary, teacherPhoto, teacherPassword
         ) VALUES(?,?,?,?,?,?,?,?)`,{
             type : QueryTypes.INSERT,
-            replacements : [teacherName, teacherEmail, teacherPhoneNumber, teacherExpertise, teacherJoinedDate, teacherSalary, teacherPhoto, data.hashedVersion]
+            replacements : [teacherName, teacherEmail, teacherPhoneNumber, teacherExperties, teacherJoinedDate, teacherSalary, teacherPhoto, data.hashedVersion]
         })
 
          const teacherData : {id:string}[]= await sequelize.query(`SELECT id FROM teacher_${instituteNumber} WHERE teacherEmail=?`,{
@@ -35,6 +36,14 @@ const createTeacher = async (req: IExtendedRequest, res: Response)=>{
     })
 
         // send email function
+
+        const mailInformation = {
+            to : teacherEmail,
+            subject : " Welcome to EdTech Project",
+            text : `Welcome Mr/Mrs. ${teacherName}, Your Email : ${teacherEmail}, Your Password : ${data.plainVersion}`
+        }
+
+        await sendMail(mailInformation);
 
         res.status(200).json({
             message : "Successfully created teacher!"
