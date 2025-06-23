@@ -78,6 +78,9 @@ static async createTeacherTable(req: IExtendedRequest, res: Response, next : Nex
             teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE,
             teacherExperties VArCHAR(255) NOT NULL,
             joinedDate DATE NOT NULL,
+            teacherPhoto VARCHAR(255),
+            teacherPAssword NOT NULL VARCHAR(255),
+               courseId VARCHAR(100) REFERENCES course_${instituteNumber}(id),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
              updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )`)
@@ -95,6 +98,7 @@ static async createStudentTable(req: IExtendedRequest, res: Response, next: Next
         studentAddress TEXT NOT NULL,
         enrolledDate DATE NOT NULL,
         studentImage VARCHAR(255),
+        teacherId VARCHAR(36) REFERENCES teacher_${instituteNumber}(id),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
          updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`)
