@@ -119,6 +119,7 @@ static async createCourseTable(req: IExtendedRequest, res : Response)
         courseLevel ENUM('beginner','intermediate','advance') NOT NULL,
         courseThumbnail VARCHAR(255) NOT NULL,
         courseDescription TEXT NOT NULL,
+        teacherId VARCHAR(36) REFERENCES teacher_${instituteNumber}(id), 
         categoryId VARCHAR(36) NOT NULL REFERENCES category_${instituteNumber} (id),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

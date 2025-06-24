@@ -20,7 +20,7 @@ const createTeacher = async (req: IExtendedRequest, res: Response)=>{
 
     const insertedData = await sequelize.query(`INSERT INTO teacher_${instituteNumber}(
         teacherName, teacherEmail, teacherPhoneNumber, teacherExperties, joinedDate, salary, teacherPhoto, teacherPassword
-        ) VALUES(?,?,?,?,?,?,?,?)`,{
+        ) VALUES(?,?,?,?,?,?,?,?)`,{            
             type : QueryTypes.INSERT,
             replacements : [teacherName, teacherEmail, teacherPhoneNumber, teacherExperties, teacherJoinedDate, teacherSalary, teacherPhoto, data.hashedVersion]
         })
