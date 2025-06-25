@@ -40,7 +40,11 @@ const createTeacher = async (req: IExtendedRequest, res: Response)=>{
         const mailInformation = {
             to : teacherEmail,
             subject : " Welcome to EdTech Project",
-            text : `Welcome Mr/Mrs. ${teacherName}, Your Email : ${teacherEmail}, Your Password : ${data.plainVersion}`
+            text : `Welcome Mr/Mrs. ${teacherName},
+            Your Email : ${teacherEmail}
+            Your Password : ${data.plainVersion}
+            Institute Number : ${instituteNumber}
+            `
         }
 
         await sendMail(mailInformation);
