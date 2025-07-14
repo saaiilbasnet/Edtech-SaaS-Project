@@ -8,8 +8,6 @@ export interface IInitialStudentData{
     data : string
 }
 
-
-
 export interface IIncomingUserPayload{
     name : string, 
     address : string, 

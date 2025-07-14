@@ -1,6 +1,7 @@
 "use client"
 import { ChangeEvent, FormEvent, useState } from "react";
 import { IRegisterData } from "./register.types";
+import { registerUser } from "@/lib/store/auth/authSlice";
 
 function Register() {
 
@@ -21,7 +22,7 @@ function Register() {
 
     const handleRegisterSubmission = (e:FormEvent<HTMLFormElement>)=>{
         // api call 
-
+        registerUser(userRegister);
     }
 
   return (

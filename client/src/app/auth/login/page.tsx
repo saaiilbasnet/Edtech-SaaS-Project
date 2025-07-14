@@ -1,6 +1,8 @@
 "use client"
 import { ChangeEvent, useState } from "react";
 import { ILoginData } from "./login.types";
+import { loginUserData } from "@/lib/store/auth/authSlice";
+
 
 function Login() {
     const [loginUser, setLoginUser] = useState<ILoginData>({
@@ -18,6 +20,8 @@ function Login() {
    const logInSubmission = ()=>{
 
     // api calls
+
+    loginUserData(loginUser);
 
    }
 
